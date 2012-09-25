@@ -78,9 +78,14 @@ module Entityjs
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <script src='#{final_name}' type='text/javascript'></script>
+    <link rel="stylesheet" type="text/css" href="#{styles_folder}/#{Config.instance.build_styles_name}.css" />
   </head>
   <body>
-    <canvas id='#{Config.instance.canvas_id}' width='#{Config.instance.width}' height='#{Config.instance.height}'>Error browser does not support canvas element.</canvas>
+    <div id="content">
+      <div class="canvas-container">
+        <canvas id='#{Config.instance.canvas_id}' width='#{Config.instance.width}' height='#{Config.instance.height}'>Error browser does not support canvas element.</canvas>
+      </div>
+    </div>
   </body>
 </html>
 )
