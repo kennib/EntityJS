@@ -52,6 +52,7 @@ re.c('scene')
 	
 	re.scene._scenes[title] = this;
 	this.sceneName = title;
+  this.entities = [];
 	
 })
 .dispose(function(){
@@ -59,8 +60,13 @@ re.c('scene')
 	delete re.scene._scenes[this.sceneName];
 	
 })
+.defaults({
+  scene_exit: function() {
+    for (var e=0; e<this.entities.length; e++)
+      this.entities[e].dispose();
+  }
+})
 .defines({
-	
 	clear:function(){
 		re('el').query('draw').dispose();
 		return this;

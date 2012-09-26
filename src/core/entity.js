@@ -33,7 +33,11 @@
     };
     
     var e = function(c){
-        
+        // Add the entity to the current scene
+        if (re.scene)
+          if (re.scene())
+            re.scene().entities.push(this);
+
         this._re_comps = [];
         this._re_listens = {};
         
