@@ -3,10 +3,17 @@
     
     @return component reference
     */
-    re.comp = re.c = function(title){
+    re.comp = re.c = function(title, data){
         
         if(!re._c[title]){
             re._c[title] = new re.c.init(title);
+        }
+
+        //set data
+        if(data){
+            for(var i in data){
+                re._c[title][i](data[i]);
+            }
         }
         
         return re._c[title];
@@ -74,7 +81,7 @@ re.c.init.prototype = {
     //turns global method into a singleton
     singleton:function(){
         this._re_method = function(){
-            return this._ || (this._ = re.e(this.name));
+            return this._singleton || (this._singleton = re.e(this.name));
         }
         return this;
     },
@@ -122,7 +129,6 @@ re.c.init.prototype = {
 
     //new control entity
     re.control(val1, val2);
-    re.c('control').factory
 
     */
     factory:function(f){
@@ -133,11 +139,23 @@ re.c.init.prototype = {
         return this;
     },
 
+    /*
+    Controls the factory method flow.
+
+    Will create a new entity and try to use the defined factory or else
+    uses the default:
+    
+    //default factory
+    re.circle({radius:10, color:"#ff0000"});
+
+    */ 
     _re_method:function(){
         var e = re.e(this.name), f = this._re_factory;
 
         if(f)
             f.apply(e, arguments);
+        else
+            e.attr.apply(e,arguments); //this is the default factory method
 
         return e;
     },

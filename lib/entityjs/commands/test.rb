@@ -8,8 +8,12 @@ module Entityjs
       end
       
       tests = []
+
+      if name.nil?
+        return 4
+      end
       
-      if name.class == Array
+      if name.is_a? Array
         tests = name[1..-1]
         
         name = name.first
@@ -44,7 +48,7 @@ module Entityjs
         return 3
       end
       
-      test_name = filename.split('_test.').shift
+      test_name = filename.split('_test.').first
       
       File.open(filename, 'w') do |f|
         
@@ -57,7 +61,7 @@ module Entityjs
         f.close
       end
       
-      puts "Created test: tests/#{filename}"
+      puts "Created test: #{filename}"
       
       Dir.chdir(Dirc.game_root)
       

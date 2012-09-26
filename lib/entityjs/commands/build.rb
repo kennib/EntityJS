@@ -21,7 +21,7 @@ module Entityjs
       scripts_folder = Config.scripts_folder
       styles_folder = Config.instance.build_styles_path
       
-      final_name = Config.instance.build_name+'.js'
+      final_name = Config.instance.build_scripts_name
       html_name = 'play.html'
       
       puts "Building to #{build_folder}"
@@ -63,7 +63,7 @@ module Entityjs
       #save css
       Dirc.create_dir(styles_folder)
 
-      File.open(styles_folder+"/"+Config.instance.build_styles_name+'.css', 'w') do |f|
+      File.open(styles_folder+"/"+Config.instance.build_styles_name, 'w') do |f|
         f.write(css)
       end
       
@@ -186,7 +186,15 @@ module Entityjs
       entity_src = self.compile_entity(Config.instance.build_entity_ignore+Config.instance.entity_ignore)
       scripts = self.compile_scripts(Config.instance.build_scripts_ignore+Config.instance.scripts_ignore, Config.instance.scripts_order)
       
-      self.build_wrap(entity_src+scripts)
+      code = self.build_wrap(entity_src+scripts)
+
+      #build erase
+      Config.instance.build_erase.each do |i|
+        #replace all finds with comments in front
+        code = code.gsub(i, "//#{i}")
+      end
+      
+      return code
     end
 
     def self.build_wrap(code)
@@ -214,18 +222,21 @@ module Entityjs
       return code
     end
     
-    def self.js_config(path = nil, images = nil, sounds = nil, canvas = nil)
+    def self.js_config(path = nil, assets = nil, canvas = nil)
       path ||= Config.assets_folder+'/'
-      images ||= self.images_to_js
-      sounds ||= self.sounds_to_js
+
+      if assets.nil?
+        assets = self.assets_to_js
+      end
+      if assets.is_a? Hash
+        assets = assets.to_json
+      end
+
       canvas ||= Config.instance.canvas_id
       
       return %Q(
       re.load.path = \"#{path}\";
-      re.assets = {
-        images:#{images},
-        sounds:#{sounds}
-        };
+      re.assets = #{assets};
       re.canvas = \"##{canvas}\";
       )
     end
@@ -246,6 +257,43 @@ module Entityjs
       s = sounds.collect{|i| "'#{i}'"}.join(', ')
       
       "[#{s}]"
+    end
+
+    #returns all folders from assets array in a js object
+    #
+    #Input like this: 
+    # ["images/blah.png", "images/tree.png", "models/tree.xml"]
+    #
+    # Is returned like this:
+    # {
+    #  images:["blah.png", "tree.png"],
+    #  model:["tree.xml"]
+    # }
+    #
+    def self.assets_to_js(assets = nil, ignore=nil)
+      assets ||= Assets.search()
+      ignore ||= Config.instance.assets_ignore
+
+      tree = {}
+
+      assets.each do |i|
+
+        if ignore.any? && !i.match(/#{ignore.join('|')}/).nil?
+          #ignore assets
+          next
+        end
+
+        #folder
+        folder = i.split('/').first
+
+        if tree[folder].nil?
+          tree[folder] = []
+        end
+
+        tree[folder].push(i)
+      end
+
+      return tree.to_json
     end
     
   end

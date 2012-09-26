@@ -333,12 +333,12 @@
         
     });
     */
-    p.on = function(type, method, context){
+    p.on = function(type, method, context, once){
         
         if(re.is(type, 'object')){
             
           for(var k in type){
-            this.on(k, type[k], method);
+            this.on(k, type[k], method, context);
           }
             
         } else {
@@ -348,11 +348,15 @@
             }
             if(!re.is(method)) throw 'Method is null'
             //save context
-            this._re_listens[type].push({c:context || this, f:method});
+            this._re_listens[type].push({c:context || this, f:method, o:once});
             
         }
         
         return this;
+    };
+
+    p.once = function(type, method, context){
+        return this.on(type, method, context, 1);
     };
     
     /*
@@ -427,8 +431,8 @@
             if(!b) break;
             if(!b[i]) continue;
             
-            //return false remove
-            if(b[i].f.apply(b[i].c, Array.prototype.slice.call(arguments, 1)) === false){
+            //return false remove or if is once listen
+            if(b[i].f.apply(b[i].c, Array.prototype.slice.call(arguments, 1)) === false || (b[i] && b[i].o)){
                 b.splice(i, 1);
             }
             

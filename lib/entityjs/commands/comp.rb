@@ -6,8 +6,12 @@ module Entityjs
       if !Dirc.game?
         return 2
       end
+
+      if name.nil?
+        return 4
+      end
       
-      if name.class == Array
+      if name.is_a? Array
         name = name.first
       end
       
@@ -17,6 +21,7 @@ module Entityjs
       end
       
       filename = name
+      
       if name.index('.').nil?
         filename += '.js'
       end
@@ -60,7 +65,7 @@ module Entityjs
         f.close
       end
       
-      puts "Created comp: #{dir}/#{filename}"
+      puts "Created comp: #{filename}"
       
       Dir.chdir(Dirc.game_root)
       
