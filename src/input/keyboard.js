@@ -15,6 +15,7 @@ re.c('keyboard')
 .statics({
   //list of listing entities
 	l:[],
+    focusStop:true,
 	
 	keyCodes: { 
     /* start the a-z keys */
@@ -116,7 +117,7 @@ re.c('keyboard')
     var tagName = (e.target || e.srcElement || {}).tagName;
     
     //disable keyboard keys if focus lost
-		if(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA'){
+		if(that.focusStop && tagName && tagName.match(/INPUT|SELECT|TEXTAREA/)){
 			return;
 		}
 		

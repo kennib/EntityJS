@@ -96,6 +96,10 @@ module Entityjs
     def scripts_order
       return split_attr('scripts-order')
     end
+
+    def assets_ignore
+      return split_attr('assets-ignore')
+    end
     
     def tests_ignore
       return split_attr('tests-ignore')
@@ -103,6 +107,18 @@ module Entityjs
     
     def entity_ignore
       return split_attr('entity-ignore')
+    end
+
+    #erases found lines on compiling
+    #NOT implemented
+    def build_erase
+      return split_attr('build-erase')
+    end
+
+    #overwrites config vars during compiling
+    #NOT implemented
+    def build_vars
+
     end
     
     def build_entity_ignore
@@ -113,8 +129,12 @@ module Entityjs
       return get_attr('build-name', self.title_slug+'.min')
     end
 
+    def build_scripts_name
+      return get_attr('build-scripts-name', self.build_name+'.js')
+    end
+
     def build_styles_name
-      return get_attr('build_styles_name', self.build_name)
+      return get_attr('build-styles-name', self.build_name+'.css')
     end
 
     def build_styles_ignore
@@ -201,6 +221,8 @@ module Entityjs
 
         contents = contents.gsub("RE_#{val}", v.to_s)
       end
+
+      #build erase
 
       #set width, height and canvas id
       #contents = contents.sub("RE_WIDTH", Config.instance.width.to_s)

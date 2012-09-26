@@ -78,7 +78,7 @@
             a = this.assets[i];
             
             //copy full source path
-            var s = (a.charAt(0)=='/')?a:re.load.path+a;
+            var s = (a.match(/^(\/|http:)/))?a:re.load.path+a;
 
             //remove directories
             a = re.load.file(a);
@@ -125,6 +125,9 @@
     p.current = 0;
     p.total = 0;
     
+    //src - full path to image
+    //a - image name
+    //n - image name without ext
     p._loadImg = function(src, a, n){
         var that = this;
         var img = new Image();
@@ -146,6 +149,7 @@
           
           that._loaded();
         };
+        img.crossOrigin = '';
         
         img.onerror = function(){
             
@@ -202,8 +206,7 @@
           });
         
         } else {
-          s = new Audio(src);
-          s.src = src;
+          s = new Audio();
           s.preload = "auto";
           s.load();
           
@@ -223,6 +226,8 @@
               }
           },false);
           
+          s.src = src;
+          
           this._def_sfx(s, a, n);
         
         }
@@ -232,7 +237,7 @@
     p._def_sfx = function(s, a, n){
       
       re.c(a)
-      //create statics codec for easy use
+      //create static codec for easy use
       .alias(n+re.load.soundExt)
       .defines({
           _sound:s

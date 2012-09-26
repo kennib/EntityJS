@@ -20,6 +20,42 @@ describe('comp', function(){
     eq(re[k.name].yep, 'yep')
   })
 
+  it('should create comp in new style', function(){
+    
+    re.c('jump12', {
+      requires:"sdf",
+
+      init:function(){
+
+      },
+
+      defines:{
+        ok:10
+      },
+
+      defaults:{
+        k:10
+      },
+
+      factory:function(){
+
+      }
+
+    });
+
+    eq(re.c('jump12')._re_requires, ['sdf']);
+    eq(re.c('jump12')._re_defines, {ok:10});
+    eq(re.c('jump12')._re_defaults, {k:10});
+
+  });
+
+  it('should use default factory', function(){
+    var a = 10;
+
+    eq(re[k.name]("blah", a).blah, a);
+
+  });
+
   it('should create a factory', function(){
     var val = 10;
 
