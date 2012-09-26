@@ -64,6 +64,8 @@ re.c('scene')
   scene_exit: function() {
     for (var e=0; e<this.entities.length; e++)
       this.entities[e].dispose();
+    
+    this.entities = [];
   }
 })
 .defines({
@@ -98,7 +100,7 @@ re.c('scene')
       re.scene.current = '';
       
       if(this.scene_exit)
-      this.scene_exit.apply(this, arguments);
+        this.scene_exit.apply(this, arguments);
     } else {
   		this.scene_exit = m;
     }
