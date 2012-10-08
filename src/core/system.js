@@ -111,11 +111,10 @@ re.c('system')
         this.timestep(Math.min(this.tick() / 1000, this.maxTick), function(){
             //update
             this.update();
+            //clear
+            this.clear(this.clearColor);
+            this.draw();
         });
-        
-        //clear
-        this.clear(this.clearColor);
-        this.draw();
     },
     
     update:function(){
