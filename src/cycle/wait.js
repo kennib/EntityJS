@@ -7,8 +7,14 @@ re.c('wait')
     //convert seconds to milliseconds
     if(time < 100) time *= 1000;
     
-    setTimeout(method, time);
+    if(this.timeout)
+      clearTimeout(this.timeout);
+    this.timeout = setTimeout(method, time);
     return this;
   }
   
+})
+.dispose(function() {
+  if(this.timeout)
+    clearTimeout(this.timeout);
 });
