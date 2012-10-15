@@ -78,7 +78,7 @@ module Entityjs
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <script src='#{final_name}' type='text/javascript'></script>
-    <link rel="stylesheet" type="text/css" href="#{styles_folder}/#{Config.instance.build_styles_name}.css" />
+    <link rel="stylesheet" type="text/css" href="#{styles_folder}/#{Config.instance.build_styles_name}" />
   </head>
   <body>
     <div id="content">
